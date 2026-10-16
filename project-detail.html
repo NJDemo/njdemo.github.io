@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Company Name project detail">
-<title>Project — COMPANY NAME</title>
+<meta name="description" content="Company Name exhibition project details and gallery.">
+<title>Project Details — COMPANY NAME</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="project-detail-page">
 <header class="site-header">
-  <a class="brand" href="index.html#home"><img src="assets/kenari-art-logo.jpg" alt="Company Name"><span>COMPANY NAME</span></a>
-  <nav class="main-nav project-nav"><a href="index.html#about">ABOUT</a><a href="index.html#services">OUR SERVICE</a><a href="index.html#clients">OUR CLIENTS</a><a href="index.html#projects">PROJECTS</a><a href="index.html#contact">CONTACT</a></nav>
+  <a class="brand" href="index.html#home" aria-label="Company Name Home"><span class="detail-brand-mark">CN</span><span>COMPANY NAME</span></a>
+  <button class="menu-toggle" id="detailMenuToggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <nav class="main-nav project-nav" id="detailNav"><a href="index.html#about">ABOUT</a><a href="index.html#services">OUR SERVICE</a><a href="index.html#clients">OUR CLIENTS</a><a href="index.html#projects">PROJECTS</a><a href="index.html#contact">CONTACT</a></nav>
 </header>
 <main>
   <section class="detail-hero"><div class="container"><a class="back-link" href="index.html#projects">← BACK TO PROJECTS</a><span id="detailCategory" class="eyebrow"></span><h1 id="detailTitle"></h1><p id="detailIntro"></p></div></section>
@@ -22,53 +23,124 @@
   <section class="detail-info"><div class="container detail-info-grid"><div><span class="eyebrow">PROJECT INFORMATION</span><h2 id="detailInfoTitle"></h2></div><div><p id="detailDescription"></p><a class="outline-button dark-button" href="index.html#contact">DISCUSS THIS PROJECT <span>→</span></a></div></div></section>
 </main>
 <footer><div class="container footer-inner"><span>© 2026 COMPANY NAME</span><a href="index.html#projects">ALL PROJECTS ↑</a></div></footer>
+<style>
+/* Detail-page-only refinements; the rest of the demo keeps its existing styling. */
+.project-detail-page .site-header { gap: 24px; }
+.project-detail-page .detail-brand-mark { display:inline-flex; width:38px; height:38px; align-items:center; justify-content:center; background:var(--pink); color:#090909; font-weight:900; letter-spacing:-1px; }
+.project-detail-page .project-nav { margin-left:auto; }
+.project-detail-page .detail-main-image { min-height:320px; }
+.project-detail-page .detail-main-image img { object-fit:contain; }
+.project-detail-page .detail-thumb:focus-visible,
+.project-detail-page .gallery-controls button:focus-visible { outline:2px solid var(--pink-soft); outline-offset:3px; }
+@media (max-width:700px) {
+  .project-detail-page .site-header { height:70px; }
+  .project-detail-page .brand span:not(.detail-brand-mark) { display:none; }
+  .project-detail-page .menu-toggle { display:block; cursor:pointer; }
+  .project-detail-page .project-nav { display:none; position:absolute; top:70px; left:0; width:100%; padding:20px 6vw; background:#090909; border-bottom:1px solid var(--pink); flex-direction:column; align-items:flex-start; gap:18px; }
+  .project-detail-page .project-nav.open { display:flex; }
+  .project-detail-page .project-nav a { font-size:10px; }
+  .project-detail-page .detail-main-image { height:56vh; min-height:280px; }
+  .project-detail-page .detail-info { padding:70px 0; }
+}
+</style>
 <script>
-const projects = [
-  {id:1, name:'Project 01', slug:'neo'},
-  {id:2, name:'Project 01', slug:'aishow'},
-  {id:3, name:'Project 01', slug:'hut67'},
-  {id:4, name:'Project 01', slug:'ifex'},
-  {id:5, name:'Project 01', slug:'iffina'},
-  {id:6, name:'Project 01', slug:'mblockH'},
-  {id:7, name:'Project 01', slug:'interpose'},
-  {id:8, name:'Project 01', slug:'inagritech'},
-  {id:9, name:'Project 01', slug:'hut66'},
-  {id:10, name:'Project 01', slug:'interposereso'},
-  {id:11, name:'Project 01', slug:'mblockU'},
-  {id:12, name:'Project 01', slug:'festival'}
-].map(p => {
-  const base = `assets/projects/${p.slug}/`;
-  const files = {
-    neo:['neo01.jpg','neo02.jpg','neo03.jpg','neo04.jpg','neo05.jpg'],
-    aishow:['aishow01.jpg','aishow02.jpg','aishow03.jpg','aishow04.jpg'],
-    hut67:['hut6701.jpg','hut6702.jpg','hut6703.jpg','hut6704.jpg','hut6705.jpg','hut6706.jpg','hut6707.jpg','hut6708.jpg'],
-    ifex:['ifex01.jpg','ifex02.jpg','ifex03.jpg','ifex04.jpg'],
-    iffina:['iffina01.jpg','iffina02.jpg','iffina03.jpg'],
-    mblockH:['mblockH01.jpg','mblockH02.jpg','mblockH03.jpg','mblockH04.jpg'],
-    interpose:['interpose01.jpg','interpose02.jpg','interpose03.jpg','interpose04.jpg','interpose05.jpg'],
-    inagritech:['inagritech01.jpg','inagritech02.jpg','inagritech03.jpg'],
-    hut66:['hut6601.jpg','hut6602.jpg','hut6603.jpg','hut6604.jpg','hut6605.jpg','hut6606.jpg','hut6607.jpg','hut6608.jpg','hut6609.jpg','hut6610.jpg'],
-    interposereso:['interposereso01.jpg','interposereso02.jpg','interposereso03.jpg','interposereso04.jpg','interposereso05.jpg','interposereso06.jpg','interposereso07.jpg','interposereso08.jpg'],
-    mblockU:['mblockU01.jpg'],
-    festival:['festival01.jpg','festival02.jpg','festival03.jpg']
-  }[p.slug];
+const projects = Array.from({ length: 12 }, (_, index) => {
+  const id = index + 1;
+  const number = String(id).padStart(2, '0');
+  const folder = `assets/images/projects/nikoproject${number}/`;
+  // The project cover is stored at assets/images; supporting views are in each project folder.
+  const images = [
+    `assets/images/nikoproject${number}.jpg`,
+    ...Array.from({ length: 5 }, (_, i) => `${folder}Niko_Juliandarus_${String(i + 1).padStart(2, '0')}.png`)
+  ];
   return {
-    id:p.id, category:'PROJECT', title:p.name,
-    intro:p.name, description:'Selected exhibition work.',
-    images:files.map(file => base + file)
+    id,
+    category: 'EXHIBITION PROJECT',
+    title: `Project ${number}`,
+    intro: `Explore the design and selected views from Project ${number}.`,
+    description: `A closer look at Project ${number} by Company Name. Browse the project cover and supporting design views below. For a similar exhibition or event project, contact our team to discuss your requirements.`,
+    images
   };
 });
-const params=new URLSearchParams(location.search); const index=Math.max(0,Math.min(19,(parseInt(params.get('project'),10)||1)-1)); const p=projects[index];
-document.title=p.title+' — COMPANY NAME';
-document.getElementById('detailCategory').textContent=p.category;
-document.getElementById('detailTitle').textContent=p.title;
-document.getElementById('detailIntro').textContent=p.intro;
-document.getElementById('detailInfoTitle').textContent=p.title;
-document.getElementById('detailDescription').textContent=p.description;
-const main=document.getElementById('detailMainImage'), thumbs=document.getElementById('detailThumbs'), count=document.getElementById('galleryCount'); let current=0;
-function show(n){current=(n+p.images.length)%p.images.length; main.src=p.images[current]; main.alt=p.title+' photo '+(current+1); count.textContent=String(current+1).padStart(2,'0')+' / '+String(p.images.length).padStart(2,'0'); [...thumbs.children].forEach((el,i)=>el.classList.toggle('active',i===current));}
-p.images.forEach((src,i)=>{const b=document.createElement('button');b.className='detail-thumb';b.innerHTML=`<img src="${src}" alt="${p.title} thumbnail ${i+1}">`;b.onclick=()=>show(i);thumbs.appendChild(b);});
-document.getElementById('prevPhoto').onclick=()=>show(current-1);document.getElementById('nextPhoto').onclick=()=>show(current+1);show(0);
+
+const params = new URLSearchParams(window.location.search);
+const requestedProject = Number.parseInt(params.get('project'), 10);
+const projectIndex = Number.isFinite(requestedProject) && requestedProject >= 1 && requestedProject <= projects.length
+  ? requestedProject - 1
+  : 0;
+const project = projects[projectIndex];
+
+document.title = `${project.title} — COMPANY NAME`;
+document.getElementById('detailCategory').textContent = project.category;
+document.getElementById('detailTitle').textContent = project.title;
+document.getElementById('detailIntro').textContent = project.intro;
+document.getElementById('detailInfoTitle').textContent = project.title;
+document.getElementById('detailDescription').textContent = project.description;
+
+const mainImage = document.getElementById('detailMainImage');
+const thumbnails = document.getElementById('detailThumbs');
+const galleryCount = document.getElementById('galleryCount');
+let currentPhoto = 0;
+
+function showPhoto(index) {
+  currentPhoto = (index + project.images.length) % project.images.length;
+  mainImage.src = project.images[currentPhoto];
+  mainImage.alt = `${project.title} — image ${currentPhoto + 1}`;
+  galleryCount.textContent = `${String(currentPhoto + 1).padStart(2, '0')} / ${String(project.images.length).padStart(2, '0')}`;
+  [...thumbnails.children].forEach((button, i) => {
+    const active = i === currentPhoto;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+}
+
+project.images.forEach((src, index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'detail-thumb';
+  button.setAttribute('aria-label', `Tampilkan foto ${index + 1}`);
+  button.setAttribute('aria-pressed', 'false');
+  const image = document.createElement('img');
+  image.src = src;
+  image.alt = `${project.title} thumbnail ${index + 1}`;
+  image.loading = 'lazy';
+  image.onerror = () => {
+    button.hidden = true;
+  };
+  button.appendChild(image);
+  button.addEventListener('click', () => showPhoto(index));
+  thumbnails.appendChild(button);
+});
+
+document.getElementById('prevPhoto').addEventListener('click', () => showPhoto(currentPhoto - 1));
+document.getElementById('nextPhoto').addEventListener('click', () => showPhoto(currentPhoto + 1));
+
+mainImage.onerror = () => {
+  // If a project image is missing, move to the next available image rather than leaving a broken image.
+  const failedIndex = currentPhoto;
+  const failedButton = thumbnails.children[failedIndex];
+  if (failedButton) failedButton.hidden = true;
+  const available = [...thumbnails.children].findIndex((button, i) => i !== failedIndex && !button.hidden);
+  if (available >= 0) {
+    mainImage.onerror = null;
+    showPhoto(available);
+  } else {
+    mainImage.removeAttribute('src');
+    mainImage.alt = 'No project images are available.';
+  }
+};
+
+// Mobile navigation mirrors the menu behavior on the main demo page.
+const detailMenuToggle = document.getElementById('detailMenuToggle');
+const detailNav = document.getElementById('detailNav');
+if (detailMenuToggle && detailNav) {
+  detailMenuToggle.addEventListener('click', () => {
+    const open = detailNav.classList.toggle('open');
+    detailMenuToggle.setAttribute('aria-expanded', String(open));
+  });
+  detailNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => detailNav.classList.remove('open')));
+}
+showPhoto(0);
 </script>
 </body>
 </html>
